@@ -1,0 +1,58 @@
+services:
+  vllm:
+    container_name: vllm
+    image: vllm/vllm-openai:latest
+    #image: vastai/vllm:v0.11.0-cuda-12.9-pytorch-2.8.0-py312
+    ipc: host
+    restart: unless-stopped
+    env_file:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/.env
+    group_add:
+      - video
+    # ports:
+    #   - "8000:8000"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/.cache/huggingface:/root/.cache/huggingface
+    command: >
+      --model Qwen/Qwen3-0.6B
+      --tensor-parallel-size 1
+      --gpu-memory-utilization 0.80
+      --reasoning-parser deepseek_r1
+ 
+# NVIDI GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  openwebui:
+    container_name: openwebui
+    image: ghcr.io/open-webui/open-webui:latest
+    restart: unless-stopped
+    depends_on:
+      - vllm
+    ports:
+      - "80:8080"
+    env_file:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/.env
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/openwebui-data:/app/backend/data
+  vllm-tg:
+    build: .
+    container_name: vllm-tg
+    restart: unless-stopped
+    depends_on:
+      - vllm
+    env_file:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/.env
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/bot-tg/:/code/
+  searxng:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/searxng/config/:/etc/searxng/
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/searxng/data/:/var/cache/searxng/
+    
