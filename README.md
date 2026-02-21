@@ -14,3 +14,11 @@ to
     - html
     - json
 ```
+
+Rename .env_Configure_and_Rename to .env
+
+and edit .env and add key
+```
+TG_TOKEN=
+HF_TOKEN=
+```
