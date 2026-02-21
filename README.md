@@ -1,4 +1,6 @@
-Edit file
+Vllm searxng openwebui telegram-botEdit file
+
+
 ./searxng/config/settings.yml
 ```
   # remove format to deny access, use lower case.
@@ -21,4 +23,9 @@ and edit .env and add key
 ```
 TG_TOKEN=
 HF_TOKEN=
+```
+
+And start
+```
+docker-compose up -d
 ```
