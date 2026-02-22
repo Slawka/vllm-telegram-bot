@@ -9,8 +9,8 @@ services:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/.env
     group_add:
       - video
-    # ports:
-    #   - "8000:8000"
+    ports:
+      - "8000:8000"
     volumes:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/.cache/huggingface:/root/.cache/huggingface
     command: >
