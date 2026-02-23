@@ -1,7 +1,9 @@
-Vllm searxng openwebui telegram-botEdit file
+Vllm 
+searxng 
+openwebui 
+telegram-bot
 
-
-./searxng/config/settings.yml
+Edit file **./searxng/config/settings.yml**
 ```
   # remove format to deny access, use lower case.
   # formats: [html, csv, json, rss]
@@ -27,5 +29,5 @@ HF_TOKEN=
 
 And start
 ```
-docker-compose up -d
+docker-compose up -d --build
 ```
